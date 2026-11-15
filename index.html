@@ -161,6 +161,24 @@ textarea{resize:vertical;min-height:70px}
 .alp{display:inline-block;margin-left:8px;padding:1px 6px;border:1px solid var(--link);color:var(--link);font:600 9px var(--sans);letter-spacing:.12em;text-transform:uppercase;vertical-align:middle}
 @media(max-width:520px){#tools,#sbar{padding:6px 12px}}
 @media(max-width:560px){form{gap:6px;padding:10px 10px}form .clip{width:38px!important;flex:none}form #mic{padding:0 8px!important;width:auto!important;font-size:10px!important}form input#tx{min-width:0;flex:1 1 0}form button[type=submit]{padding:0 10px;font-size:10px;flex:none}}
+.ff-sans #msgs,.ff-sans #msgs *{font-family:"Helvetica Neue",Arial,sans-serif!important}
+.ff-mono #msgs,.ff-mono #msgs *{font-family:ui-monospace,Menlo,Consolas,monospace!important}
+.ffb{border:1px solid var(--line);background:none;color:var(--tx);padding:6px 10px;cursor:pointer;font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.06em}
+.ffb.on{border-color:var(--tx);box-shadow:inset 0 -3px 0 var(--acc,var(--tx))}
+#plp{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;padding:16px;z-index:46;overflow:auto}
+#plp .box{margin:auto;max-width:440px;width:100%}
+#pll{margin:10px 0;max-height:240px;overflow:auto;border:1px solid var(--line)}
+#pll div{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;font:14px var(--sans)}
+#pll div.on{background:var(--me);font-weight:700}
+#pll span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pll b{cursor:pointer;color:var(--mut);padding:0 6px}
+.plr{display:flex;gap:8px;margin:8px 0}.plr button{flex:1;padding:10px 0}
+.prem{display:inline-block;margin-left:6px;padding:1px 6px;font:700 9px var(--sans);letter-spacing:.12em;background:linear-gradient(90deg,#c9961a,#f2d06b);color:#2a1d00;vertical-align:middle;border-radius:2px;text-transform:uppercase}
+#ann{display:flex;gap:10px;align-items:flex-start;padding:8px 20px;background:var(--me);border-bottom:1px solid var(--line);font:14px var(--sans)}
+#ann span{flex:1}#ann button{border:0;background:none;cursor:pointer;color:var(--mut);font-size:16px}
+#adp{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;padding:16px;z-index:46;overflow:auto}
+#adp .box{margin:auto;max-width:440px;width:100%}
+#adp .plr{flex-wrap:wrap}#adp .plr button{flex:1 1 40%}
 </style></head><body>
 
 <div id="gate"><div class="box">
@@ -183,7 +201,8 @@ textarea{resize:vertical;min-height:70px}
 <div id="app" class="hide">
  <header><div><img data-logo class="hl" alt=""><b>6Б</b><span id="who"></span></div><div class="hb"><button id="pf" type="button">Профиль</button><button id="pv" type="button">Данные</button><button id="snd" type="button">Звук</button><button id="th" type="button">Тема</button><button id="out">Выйти</button></div></header>
  <div id="dl"></div>
- <div id="tools"><button id="sq" type="button">Поиск</button><button id="sty" type="button">Стиль</button><span class="alp">2.7 release</span><span id="onl"></span></div>
+ <div id="tools"><button id="sq" type="button">Поиск</button><button id="sty" type="button">Стиль</button><button id="plb" type="button" class="hide">Плеер</button><button id="adb" type="button" class="hide">Админ</button><span class="alp">2.9 release</span><span id="onl"></span></div>
+ <div id="ann" class="hide"><span id="anntx"></span><button id="annx" type="button">✕</button></div>
  <div id="sbar" class="hide"><input id="sin" type="text" placeholder="Поиск по сообщениям (Esc — закрыть)" autocomplete="off"><span id="scnt"></span></div>
  <nav id="tabs"><button data-t="group" class="on">Общий чат</button><button data-t="dms">Личные</button><button data-t="members">Участники</button><button data-t="hw">ДЗ</button></nav>
  <div id="thead" class="hide"><button id="back" type="button">&larr; Назад</button><span id="ttl"></span></div>
@@ -239,12 +258,34 @@ textarea{resize:vertical;min-height:70px}
  <h2 style="font:400 26px var(--mast);margin:0 0 12px">Стиль</h2>
  <label>Акцентный цвет</label><div id="swr" style="display:flex;gap:10px;margin-bottom:18px"></div>
  <label>Размер текста: <span id="fsv"></span></label><input id="fsz" type="range" min="14" max="22" step="1" style="padding:0;border:0">
+ <label>Шрифт чата</label><div style="display:flex;gap:8px;margin-bottom:16px"><button type="button" class="ffb" data-f="">Газетный</button><button type="button" class="ffb" data-f="sans">Простой</button><button type="button" class="ffb" data-f="mono">Моно</button></div>
  <label class="chk"><input type="checkbox" id="cmpc"><span>Компактные сообщения</span></label>
  <button class="btn" id="stc" type="button" style="margin-top:8px">Готово</button>
 </div></div>
+<div id="adp" class="hide"><div class="box">
+ <h2 style="font:400 26px var(--mast);margin:0 0 12px">Админ-панель</h2>
+ <label>Объявление для всех (баннер вверху)</label><input id="adin" type="text" maxlength="200" placeholder="Текст объявления">
+ <div class="plr"><button class="btn" id="adpub" type="button">Опубликовать</button><button class="btn" id="adclr" type="button">Снять</button></div>
+ <label>Сообщение от админа в общий чат</label><input id="adbc" type="text" maxlength="200" placeholder="Текст сообщения">
+ <div class="plr"><button class="btn" id="adsend" type="button">Отправить в чат</button></div>
+ <div class="plr"><button class="btn" id="adst" type="button">Статистика</button><button class="btn" id="adcf" type="button">Конфетти всем</button></div>
+ <div class="plr"><button class="btn" id="adx" type="button">Закрыть</button></div>
+</div></div>
+<div id="plp" class="hide"><div class="box">
+ <h2 style="font:400 26px var(--mast);margin:0 0 4px">Плеер</h2>
+ <div id="plt" style="font:13px var(--sans);color:var(--mut)">Песни хранятся только на этом телефоне</div>
+ <audio id="pla" controls style="width:100%;margin-top:10px"></audio>
+ <div class="plr"><button class="btn" id="plprev" type="button">&lt;&lt;</button><button class="btn" id="plpl" type="button">Играть</button><button class="btn" id="plnext" type="button">&gt;&gt;</button><button class="btn" id="plsh" type="button">Порядок</button></div>
+ <div id="pll"></div>
+ <input id="plf" type="file" accept="audio/*" multiple style="display:none">
+ <div class="plr"><button class="btn" id="pladd" type="button">Добавить песни</button><button class="btn" id="plx" type="button">Закрыть</button></div>
+</div></div>
 <div id="news" class="hide"><div class="box">
  <h2>definitely pantera</h2><div class="sub" style="margin:6px 0 10px" id="nver"></div><p class="beta">Мессенджер в раннем тестировании: возможны ошибки, сообщайте о них</p>
- <h3>Версия 2.7 release</h3><ul><li>Форматирование текста: *курсив*, **жирный**, ~~зачёркнутый~~, `код`, ||спойлер||</li><li>Поиск по чату: кнопка «Поиск» или Ctrl+K</li><li>Панель «Стиль»: акцентный цвет, размер текста, компактный режим</li><li>Кнопка ↓ со счётчиком новых сообщений, «копировать» под каждым сообщением</li><li>Счётчик «в сети», липкие даты, Esc закрывает окна</li><li>Новые команды: /выбери а | б, /число 1 100, /таймер 5, /конфетти</li></ul>
+ <h3>Версия 2.9</h3><ul><li>Метка PREMIUM рядом с именем администратора</li><li>Админ-панель: объявление-баннер для всех, сообщение от админа, статистика, конфетти всем</li><li>Админ-команды: /объявление, /снять, /всем, /стат</li><li>Исправлена ошибка 2.8: команды чата (/помощь, /кубик и другие) не срабатывали</li></ul>
+  <h3>Версия 2.8.1</h3><ul><li>Плеер с песнями: доступен только администратору, треки хранятся на самом телефоне</li></ul>
+  <h3>Версия 2.8 release</h3><ul><li>Исправлен бан: кнопка срабатывает с первого раза и сообщает об ошибке</li><li>Исправлено двойное «присоединился к чату»</li><li>Общее конфетти: /конфетти видят все, кто в сети</li><li>Черновики: недописанное сообщение сохраняется отдельно для каждого чата</li><li>Шрифт чата: газетный, простой или моно (в «Стиле»)</li><li>Команда /кто показывает, кто в сети</li></ul>
+  <h3>Версия 2.7 release</h3><ul><li>Форматирование текста: *курсив*, **жирный**, ~~зачёркнутый~~, `код`, ||спойлер||</li><li>Поиск по чату: кнопка «Поиск» или Ctrl+K</li><li>Панель «Стиль»: акцентный цвет, размер текста, компактный режим</li><li>Кнопка ↓ со счётчиком новых сообщений, «копировать» под каждым сообщением</li><li>Счётчик «в сети», липкие даты, Esc закрывает окна</li><li>Новые команды: /выбери а | б, /число 1 100, /таймер 5, /конфетти</li></ul>
   <h3>Версия 2.6b++</h3><ul><li>Профиль: фото, статус, настроение, «О себе», любимый предмет, увлечение</li><li>Просмотр профилей других участников, аватарки в чате и списке участников</li><li>Обновлён текст согласия (добавлены данные профиля): нужно дать согласие заново</li></ul>
  <h3>Версия 2.5+</h3><ul><li>Экран согласия на обработку персональных данных (шаблон: поля в [скобках] заполняет оператор)</li><li>Кнопка «Данные»: статус согласия и отзыв согласия с удалением данных</li></ul>
  <h3>Версия 2.5</h3><ul><li>Голосовые сообщения: кнопка «Голос», запись до 60 секунд</li><li>Доска домашнего задания для всего класса (вкладка «ДЗ»)</li></ul>
@@ -289,7 +330,7 @@ async function isVip(n) {
   return vipCache[k];
 }
 function badge() { const b = document.createElement("span"); b.className = "ck"; b.textContent = "\u2713"; b.title = "Подтверждён"; return b; }
-const VERSION = "2.7";
+const VERSION = "2.9";
 let soundOn = (function () { try { return localStorage.getItem("dp_snd") !== "0" } catch (e) { return true } })();
 let replyTo = null, bansList = {}, hwData = {}, profiles = {};
 let lastSeen = 0, t2 = null, t3 = null, users = {}, myMeta = {}, lastInbox = 0, cur = { k: "group" }, view = "chat", metaSeen = {}, metaInit = false, kc = 0;
@@ -317,7 +358,7 @@ function showReg() {
   $("s1").classList.add("hide"); $("s2").classList.remove("hide");
   $("gate").classList.remove("hide"); $("fn").focus();
 }
-async function register() {
+async function register0() {
   if (!consentOk()) { showConsent(); return; }
   const clean = v => v.trim().replace(/\s+/g, " ");
   const fn = clean($("fn").value), ln = clean($("ln").value);
@@ -817,7 +858,7 @@ function kickBanned() {
   $("s1").classList.add("hide"); $("s2").classList.add("hide");
   $("err").textContent = "Доступ закрыт: администратор заблокировал этот аккаунт.";
 }
-async function banUser(id, nick) {
+async function banUser0(id, nick) {
   if (!confirm("Забанить " + nick + "?")) return;
   try { await dbPatch({ ["bans/" + id]: { nick, ts: Date.now() }, ["bans/n_" + vipKey(nick)]: { nick, ts: Date.now() }, ["users/" + id]: null }); refreshLists(); } catch (e) {}
 }
@@ -825,7 +866,7 @@ async function unbanUser(nick) {
   const m = {}; for (const [k, v] of Object.entries(bansList)) if (v && v.nick === nick) m["bans/" + k] = null;
   try { await dbPatch(m); refreshLists(); } catch (e) {}
 }
-function renderMembers() {
+function renderMembers0() {
   const box = $("members"); box.textContent = "";
   const list = Object.entries(users).filter(([, u]) => u && u.nick).sort((a, b) => (online(b[1]) - online(a[1])) || a[1].nick.localeCompare(b[1].nick, "ru"));
   const h = document.createElement("div"); h.className = "lh";
@@ -846,7 +887,7 @@ function renderMembers() {
     if (names.length) {
       const hh = document.createElement("div"); hh.className = "lh"; hh.textContent = "Заблокированные"; box.appendChild(hh);
       for (const n of names) { const b2 = addRow(box, n, "заблокирован", 0, false, null);
-        const ub = document.createElement("button"); ub.type = "button"; ub.className = "unr"; ub.style.cssText = "cursor:pointer;border:0"; ub.textContent = "Разбан"; ub.onclick = () => unbanUser(n); b2.parentNode.parentNode.appendChild(ub); }
+        const ub = document.createElement("button"); ub.type = "button"; ub.className = "unr"; ub.style.cssText = "cursor:pointer;border:0"; ub.textContent = "Разбан"; ub.onclick = () => unbanUser2(n); b2.parentNode.parentNode.appendChild(ub); }
     }
   }
 }
@@ -1158,7 +1199,7 @@ function confetti() {
     if (++f < 170) requestAnimationFrame(step); else c.remove();
   })();
 }
-async function command(t) {
+async function command27(t) {
   const c = t.toLowerCase().split(" ")[0]; let out = null;
   if (c === "/выбери") {
     const p = t.slice(7).split("|").map(x => x.trim()).filter(Boolean);
@@ -1272,6 +1313,163 @@ async function pwOk(p) {
 async function updPw() { const n = ($("fn").value + " " + $("ln").value).trim().replace(/\s+/g, " "); $("pwrow").classList.toggle("hide", !(n.length > 3 && await needPw(n))); }
 $("fn").addEventListener("input", updPw); $("ln").addEventListener("input", updPw);
 $("apw").onkeydown = e => { if (e.key === "Enter") register(); };
+/* ===== 2.8 ===== */
+// исправление: бан срабатывал не с первого раза (список перерисовывался во время нажатия, ошибки глотались)
+let lastMemTouch = 0, memT = null, banBusy = false, regBusy = false;
+$("members").addEventListener("pointerdown", () => { lastMemTouch = Date.now(); }, true);
+function renderMembers() {
+  const wait = 2500 - (Date.now() - lastMemTouch);
+  if (wait > 0) { clearTimeout(memT); memT = setTimeout(renderMembers, wait + 50); return; }
+  renderMembers0();
+}
+async function banUser(id, nick) {
+  if (banBusy) return;
+  if (!confirm("Забанить " + nick + "?")) return;
+  banBusy = true;
+  try {
+    const ts = Date.now(), k = "n_" + vipKey(nick);
+    const patch = { ["bans/" + id]: { nick, ts }, ["bans/" + k]: { nick, ts }, ["users/" + id]: null };
+    let ok = false;
+    for (let i = 0; i < 3 && !ok; i++) {
+      try { await dbPatch(patch); const b = await dbGet("bans"); ok = !!(b && b[id]); } catch (e) {}
+      if (!ok) await new Promise(r => setTimeout(r, 400));
+    }
+    if (!ok) { alert("Не удалось забанить " + nick + ". Проверь интернет и попробуй ещё раз."); return; }
+    bansList[id] = { nick, ts }; bansList[k] = { nick, ts }; delete users[id];
+    lastMemTouch = 0; renderMembers(); refreshLists();
+  } finally { banBusy = false; }
+}
+async function unbanUser2(nick) { lastMemTouch = 0; return unbanUser(nick); }
+// исправление: двойное «присоединился к чату» при повторном нажатии
+async function register() {
+  if (regBusy) return; regBusy = true;
+  try { await register0(); } finally { setTimeout(() => { regBusy = false; }, 1500); }
+}
+// команды 2.8: /кто
+async function command(t) {
+  if (await adminCmd(t)) return true;
+  if (t.toLowerCase().split(" ")[0] === "/кто") {
+    const a = Object.values(users || {}).filter(u => u && u.nick && online(u)).map(u => u.nick);
+    localNotice(a.length ? "В сети сейчас (" + a.length + "): " + a.join(", ") : "Сейчас никого нет в сети");
+    return true;
+  }
+  if (t.toLowerCase().split(" ")[0] === "/помощь") { await command27(t); localNotice("Ещё в 2.8: /кто — кто в сети."); return true; }
+  return command27(t);
+}
+(function () {
+  const R = document.documentElement, msgs = $("msgs"), tx = $("tx");
+  // шрифт чата
+  let ff = store.get("dp_ff") || "";
+  function paintFont() { R.classList.toggle("ff-sans", ff === "sans"); R.classList.toggle("ff-mono", ff === "mono"); document.querySelectorAll(".ffb").forEach(b => b.classList.toggle("on", b.dataset.f === ff)); }
+  document.querySelectorAll(".ffb").forEach(b => { b.onclick = () => { ff = b.dataset.f; store.set("dp_ff", ff); paintFont(); }; });
+  paintFont();
+  // общее конфетти: видят все, кто в сети
+  const seen = new Set();
+  function scanCf() {
+    msgs.querySelectorAll(".sys").forEach(e => {
+      const t = e.textContent; if (!t.includes("запускает конфетти") || seen.has(t)) return;
+      seen.add(t); if (me && t.includes(me + " запускает")) return;
+      const m = t.match(/(\d\d):(\d\d)\s*$/); if (!m) return;
+      const n = new Date(), d = (n.getHours() * 60 + n.getMinutes()) - (+m[1] * 60 + +m[2]);
+      if (d >= 0 && d <= 1 || d === -1439) confetti();
+    });
+  }
+  new MutationObserver(() => setTimeout(scanCf, 200)).observe(msgs, { childList: true });
+  // черновики: у каждого чата свой
+  let k = "";
+  const key = () => "dp_dr_" + (cur ? cur.k + (cur.peer || "") : "x");
+  const save = (kk, v) => { try { v ? store.set(kk, v) : store.del(kk); } catch (e) {} };
+  setInterval(() => {
+    const nk = key();
+    if (nk !== k) { if (k) save(k, tx.value); k = nk; try { tx.value = store.get(nk) || ""; } catch (e) {} }
+    else save(k, tx.value);
+  }, 400);
+})();
+/* ===== плеер (только для администратора) ===== */
+(function () {
+  const au = $("pla"); let pdb, list = [], idx = -1, url = null, rnd = false;
+  const open = () => new Promise((ok, no) => { const r = indexedDB.open("pantera_player", 1); r.onupgradeneeded = () => r.result.createObjectStore("t", { keyPath: "id" }); r.onsuccess = () => ok(r.result); r.onerror = () => no(); });
+  const st = m => pdb.transaction("t", m).objectStore("t");
+  const load = () => new Promise(ok => { const r = st("readonly").getAll(); r.onsuccess = () => ok(r.result.sort((a, b) => a.id - b.id)); r.onerror = () => ok([]); });
+  const name = n => n.replace(/\.[^.]+$/, "");
+  function paint() {
+    const box = $("pll"); box.textContent = "";
+    if (!list.length) { box.style.display = "none"; return; } box.style.display = "";
+    list.forEach((t, i) => {
+      const d = document.createElement("div"); if (i === idx) d.className = "on";
+      const s = document.createElement("span"); s.textContent = name(t.name);
+      const x = document.createElement("b"); x.textContent = "✕";
+      x.onclick = async e => { e.stopPropagation(); if (!confirm("Удалить «" + name(t.name) + "»?")) return; if (i === idx) { au.pause(); idx = -1; } else if (i < idx) idx--; await new Promise(ok => { const r = st("readwrite").delete(t.id); r.onsuccess = r.onerror = ok; }); list = await load(); paint(); };
+      d.onclick = () => play(i); d.append(s, x); box.appendChild(d);
+    });
+  }
+  function play(i) {
+    if (!list.length) return; idx = (i + list.length) % list.length;
+    if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(list[idx].blob); au.src = url; au.play().catch(() => {});
+    $("plt").textContent = name(list[idx].name); paint();
+    try { if ("mediaSession" in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: name(list[idx].name), artist: "Плеер 6Б" }); } catch (e) {}
+  }
+  const next = () => play(rnd && list.length > 1 ? (idx + 1 + Math.floor(Math.random() * (list.length - 1))) : idx + 1);
+  au.onended = next;
+  au.onplay = () => { $("plpl").textContent = "Пауза"; }; au.onpause = () => { $("plpl").textContent = "Играть"; };
+  $("plpl").onclick = () => { if (idx < 0) play(0); else if (au.paused) au.play(); else au.pause(); };
+  $("plprev").onclick = () => play(idx < 0 ? 0 : idx - 1); $("plnext").onclick = next;
+  $("plsh").onclick = () => { rnd = !rnd; $("plsh").textContent = rnd ? "Вперемешку" : "По порядку"; };
+  $("plsh").textContent = "По порядку";
+  $("pladd").onclick = () => $("plf").click();
+  $("plf").onchange = async () => {
+    if (!pdb) return; const fs = [...$("plf").files]; let n = Date.now();
+    for (const f of fs) await new Promise(ok => { const r = st("readwrite").put({ id: n++, name: f.name, blob: f }); r.onsuccess = r.onerror = ok; });
+    $("plf").value = ""; list = await load(); paint();
+  };
+  $("plx").onclick = () => $("plp").classList.add("hide");
+  $("plb").onclick = async () => {
+    if (!isAdmin()) return; $("plp").classList.remove("hide");
+    if (!pdb) { try { pdb = await open(); list = await load(); paint(); } catch (e) { $("plt").textContent = "Хранилище недоступно в этом браузере"; } }
+  };
+  setInterval(() => $("plb").classList.toggle("hide", !isAdmin()), 2000);
+})();
+/* ===== 2.9: премиум и админ-функции ===== */
+function badge0() { const b = document.createElement("span"); b.className = "ck"; b.textContent = "\u2713"; b.title = "Подтверждён"; return b; }
+function badge() { const w = document.createElement("span"); w.appendChild(badge0()); const p = document.createElement("span"); p.className = "prem"; p.textContent = "Premium"; p.title = "Премиум-аккаунт"; w.appendChild(p); return w; }
+async function pollAnn() {
+  if (!me) return;
+  try {
+    const a = await dbGet("announce");
+    if (a && a.text && store.get("dp_annx") !== String(a.ts)) { $("anntx").textContent = "📢 " + a.text; $("ann").dataset.ts = a.ts; $("ann").classList.remove("hide"); }
+    else $("ann").classList.add("hide");
+  } catch (e) {}
+}
+async function setAnn(t) { t = (t || "").trim().slice(0, 200); await dbPatch({ announce: t ? { text: t, ts: Date.now(), by: me } : null }); pollAnn(); }
+async function adminStats() {
+  try {
+    const m = await dbGet("messages"), us = Object.values(users || {}).filter(u => u && u.nick);
+    const bn = new Set(Object.values(bansList || {}).filter(v => v && v.nick).map(v => v.nick)).size;
+    return "📊 Участников: " + us.length + " · в сети: " + us.filter(online).length + " · заблокировано: " + bn + " · сообщений в общем чате: " + (m ? Object.keys(m).length : 0);
+  } catch (e) { return "Не удалось получить статистику"; }
+}
+async function adminCmd(t) {
+  const c = t.toLowerCase().split(" ")[0], rest = t.slice(c.length).trim();
+  if (!["/объявление", "/снять", "/всем", "/стат"].includes(c)) return false;
+  if (!isAdmin()) { localNotice("Эта команда только для администратора"); return true; }
+  if (c === "/объявление") { if (!rest) localNotice("Объявление: /объявление текст"); else { await setAnn(rest); localNotice("📢 Объявление опубликовано"); } }
+  else if (c === "/снять") { await setAnn(""); localNotice("Объявление снято"); }
+  else if (c === "/всем") { if (!rest) localNotice("Сообщение: /всем текст"); else await postSys("📢 " + me + ": " + rest.slice(0, 200)); }
+  else localNotice(await adminStats());
+  return true;
+}
+(function () {
+  $("annx").onclick = () => { store.set("dp_annx", $("ann").dataset.ts || ""); $("ann").classList.add("hide"); };
+  $("adb").onclick = () => { if (isAdmin()) $("adp").classList.remove("hide"); };
+  $("adx").onclick = () => $("adp").classList.add("hide");
+  $("adpub").onclick = async () => { const v = $("adin").value.trim(); if (!v) return; await setAnn(v); $("adin").value = ""; alert("Объявление опубликовано"); };
+  $("adclr").onclick = async () => { await setAnn(""); alert("Объявление снято"); };
+  $("adsend").onclick = async () => { const v = $("adbc").value.trim(); if (!v) return; await postSys("📢 " + me + ": " + v.slice(0, 200)); $("adbc").value = ""; $("adp").classList.add("hide"); };
+  $("adst").onclick = async () => alert(await adminStats());
+  $("adcf").onclick = async () => { $("adp").classList.add("hide"); await command("/конфетти"); };
+  setInterval(() => $("adb").classList.toggle("hide", !isAdmin()), 2000);
+  setInterval(pollAnn, 12000); setTimeout(pollAnn, 3000);
+})();
 renderConsentDoc($("cscroll")); policyLine($("cpol"));
 $("cver").textContent = "Версия документа: " + CONSENT_VERSION;
 if (DOC_UNFILLED) { $("cwarn").classList.remove("hide"); $("cwarn").textContent = "Для оператора (не для участников): это шаблон, а не юридическая консультация. Поля в [скобках] нужно заполнить в файле (раздел «ОПЕРАТОР И СОГЛАСИЕ»), текст проверить со специалистом. Это сообщение исчезнет, когда не останется незаполненных полей."; }
