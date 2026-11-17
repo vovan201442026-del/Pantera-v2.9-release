@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#f7f5f0">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pantera 6Б">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -179,6 +181,28 @@ textarea{resize:vertical;min-height:70px}
 #adp{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;padding:16px;z-index:46;overflow:auto}
 #adp .box{margin:auto;max-width:440px;width:100%}
 #adp .plr{flex-wrap:wrap}#adp .plr button{flex:1 1 40%}
+/* ===== 2.9+ iOS ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+button,.row,.sw,.sp,.m img,#tabs button{touch-action:manipulation}
+button,.clip,.sp,#tabs button,#tools button{-webkit-user-select:none;user-select:none}
+button{-webkit-appearance:none;appearance:none;border-radius:0}
+.sw{border-radius:50%}#sdn{border-radius:21px}
+input[type=date]{min-width:0;max-width:100%;min-height:46px;display:block}
+#msgs,.lst,#pll,.ctext,#news,#stp,#plp,#adp,#profile,#privacy,#consent{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#news{overflow:auto}#news .box{margin:auto}
+#zoom img{touch-action:pinch-zoom}
+#app{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+header{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+form#f{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+#sdn{bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+#gate,#news,#stp,#plp,#adp,#profile,#privacy,#consent{padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(max-width:560px){form#f{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}}
+@media(pointer:coarse){header button,#tools button,#thead button,.ffb,.vb{min-height:34px}#tabs button{min-height:44px}.m button.v{min-height:40px}}
+html.ios input:not([type=checkbox]):not([type=radio]):not([type=file]),html.ios textarea,html.ios select{font-size:16px!important}
+html.ios #app{position:fixed;left:0;right:0;top:var(--vvt,0px);height:var(--vvh,100%);margin:0 auto}
+html.ios #gate{height:var(--vvh,100%);overflow:auto}
+html.ios.kb form#f{padding-bottom:10px}
 </style></head><body>
 
 <div id="gate"><div class="box">
@@ -201,7 +225,7 @@ textarea{resize:vertical;min-height:70px}
 <div id="app" class="hide">
  <header><div><img data-logo class="hl" alt=""><b>6Б</b><span id="who"></span></div><div class="hb"><button id="pf" type="button">Профиль</button><button id="pv" type="button">Данные</button><button id="snd" type="button">Звук</button><button id="th" type="button">Тема</button><button id="out">Выйти</button></div></header>
  <div id="dl"></div>
- <div id="tools"><button id="sq" type="button">Поиск</button><button id="sty" type="button">Стиль</button><button id="plb" type="button" class="hide">Плеер</button><button id="adb" type="button" class="hide">Админ</button><span class="alp">2.9 release</span><span id="onl"></span></div>
+ <div id="tools"><button id="sq" type="button">Поиск</button><button id="sty" type="button">Стиль</button><button id="plb" type="button" class="hide">Плеер</button><button id="adb" type="button" class="hide">Админ</button><span class="alp">2.9+ release</span><span id="onl"></span></div>
  <div id="ann" class="hide"><span id="anntx"></span><button id="annx" type="button">✕</button></div>
  <div id="sbar" class="hide"><input id="sin" type="text" placeholder="Поиск по сообщениям (Esc — закрыть)" autocomplete="off"><span id="scnt"></span></div>
  <nav id="tabs"><button data-t="group" class="on">Общий чат</button><button data-t="dms">Личные</button><button data-t="members">Участники</button><button data-t="hw">ДЗ</button></nav>
@@ -282,7 +306,8 @@ textarea{resize:vertical;min-height:70px}
 </div></div>
 <div id="news" class="hide"><div class="box">
  <h2>definitely pantera</h2><div class="sub" style="margin:6px 0 10px" id="nver"></div><p class="beta">Мессенджер в раннем тестировании: возможны ошибки, сообщайте о них</p>
- <h3>Версия 2.9</h3><ul><li>Метка PREMIUM рядом с именем администратора</li><li>Админ-панель: объявление-баннер для всех, сообщение от админа, статистика, конфетти всем</li><li>Админ-команды: /объявление, /снять, /всем, /стат</li><li>Исправлена ошибка 2.8: команды чата (/помощь, /кубик и другие) не срабатывали</li></ul>
+ <h3>Версия 2.9+</h3><ul><li>Оптимизация для iPhone и iPad: клавиатура больше не перекрывает поле ввода и не сдвигает страницу</li><li>Учтены «чёлка», скруглённые углы и полоска «Домой» (safe area)</li><li>Нет автоувеличения экрана при вводе и двойного тапа, плавная прокрутка</li><li>Голосовые сообщения записываются в формате, который воспроизводится на iOS; звук уведомлений работает после первого касания</li><li>Уведомления в установленном приложении (экран «Домой»), чат обновляется сразу при возврате в приложение</li></ul>
+  <h3>Версия 2.9</h3><ul><li>Метка PREMIUM рядом с именем администратора</li><li>Админ-панель: объявление-баннер для всех, сообщение от админа, статистика, конфетти всем</li><li>Админ-команды: /объявление, /снять, /всем, /стат</li><li>Исправлена ошибка 2.8: команды чата (/помощь, /кубик и другие) не срабатывали</li></ul>
   <h3>Версия 2.8.1</h3><ul><li>Плеер с песнями: доступен только администратору, треки хранятся на самом телефоне</li></ul>
   <h3>Версия 2.8 release</h3><ul><li>Исправлен бан: кнопка срабатывает с первого раза и сообщает об ошибке</li><li>Исправлено двойное «присоединился к чату»</li><li>Общее конфетти: /конфетти видят все, кто в сети</li><li>Черновики: недописанное сообщение сохраняется отдельно для каждого чата</li><li>Шрифт чата: газетный, простой или моно (в «Стиле»)</li><li>Команда /кто показывает, кто в сети</li></ul>
   <h3>Версия 2.7 release</h3><ul><li>Форматирование текста: *курсив*, **жирный**, ~~зачёркнутый~~, `код`, ||спойлер||</li><li>Поиск по чату: кнопка «Поиск» или Ctrl+K</li><li>Панель «Стиль»: акцентный цвет, размер текста, компактный режим</li><li>Кнопка ↓ со счётчиком новых сообщений, «копировать» под каждым сообщением</li><li>Счётчик «в сети», липкие даты, Esc закрывает окна</li><li>Новые команды: /выбери а | б, /число 1 100, /таймер 5, /конфетти</li></ul>
@@ -330,7 +355,18 @@ async function isVip(n) {
   return vipCache[k];
 }
 function badge() { const b = document.createElement("span"); b.className = "ck"; b.textContent = "\u2713"; b.title = "Подтверждён"; return b; }
-const VERSION = "2.9";
+const VERSION = "2.9+";
+const IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+if (IS_IOS) document.documentElement.classList.add("ios");
+function pushN(title, body) {
+  try {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+    const direct = () => { try { new Notification(title, { body }); } catch (e) {} };
+    if (navigator.serviceWorker && navigator.serviceWorker.getRegistration) {
+      navigator.serviceWorker.getRegistration().then(r => { if (r && r.showNotification) r.showNotification(title, { body, icon: "icon-192.png" }).catch(direct); else direct(); }).catch(direct);
+    } else direct();
+  } catch (e) {}
+}
 let soundOn = (function () { try { return localStorage.getItem("dp_snd") !== "0" } catch (e) { return true } })();
 let replyTo = null, bansList = {}, hwData = {}, profiles = {};
 let lastSeen = 0, t2 = null, t3 = null, users = {}, myMeta = {}, lastInbox = 0, cur = { k: "group" }, view = "chat", metaSeen = {}, metaInit = false, kc = 0;
@@ -465,9 +501,15 @@ function linkify0(text) {
   if (last < text.length) d.append(text.slice(last));
   return d;
 }
+let beepCtx = null;
+function beepUnlock() {
+  try { const C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+    if (!beepCtx) beepCtx = new C(); if (beepCtx.state !== "running") beepCtx.resume(); } catch (e) {}
+}
+["touchend", "click", "keydown"].forEach(ev => document.addEventListener(ev, beepUnlock, { passive: true }));
 function beep() {
-  try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain();
-    o.connect(g); g.connect(a.destination); o.frequency.value = 660; g.gain.value = 0.05; o.start(); o.stop(a.currentTime + 0.12); setTimeout(() => a.close(), 400); } catch (e) {}
+  try { beepUnlock(); const a = beepCtx; if (!a) return; const o = a.createOscillator(), g = a.createGain();
+    o.connect(g); g.connect(a.destination); o.frequency.value = 660; g.gain.value = 0.05; o.start(); o.stop(a.currentTime + 0.12); } catch (e) {}
 }
 async function react(k, emo) {
   const t = tidOf(cur); if (!t) return;
@@ -511,8 +553,8 @@ async function toggleRec() {
   if (rec) { rec.stop(); return; }
   if (!navigator.mediaDevices || !window.MediaRecorder) { alert("Этот браузер не поддерживает запись голоса"); return; }
   let stream;
-  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { alert("Нет доступа к микрофону. Разреши его в настройках браузера."); return; }
-  const mt = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg"].find(t => MediaRecorder.isTypeSupported(t)) || "";
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { alert(IS_IOS ? "Нет доступа к микрофону. Разреши его: Настройки → Safari → Микрофон (или для приложения на экране «Домой»)." : "Нет доступа к микрофону. Разреши его в настройках браузера."); return; }
+  const mt = (IS_IOS ? ["audio/mp4", "audio/webm;codecs=opus", "audio/webm", "audio/ogg"] : ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg"]).find(t => MediaRecorder.isTypeSupported(t)) || "";
   recChunks = []; const r = new MediaRecorder(stream, mt ? { mimeType: mt } : {}); rec = r;
   r.ondataavailable = e => { if (e.data.size) recChunks.push(e.data); };
   r.onstop = async () => {
@@ -691,7 +733,7 @@ async function render(list) {
     if (lastSeen && fresh.length && soundOn) beep();
     if (lastSeen && fresh.length && document.hidden && "Notification" in window && Notification.permission === "granted") {
       const m = fresh[fresh.length - 1];
-      new Notification("definitely pantera · 6Б", { body: m.nick + ": " + (m.text || "вложение") });
+      pushN("definitely pantera · 6Б", m.nick + ": " + (m.text || "вложение"));
     }
     if (list.length) lastSeen = Math.max(lastSeen, ...list.map(m => m.ts || 0));
   } catch (e) {}
@@ -811,10 +853,10 @@ async function refreshLists() {
     lastInbox = ib ? Math.max(...Object.values(ib).map(x => x.ts || 0)) : 0;
     const hid = document.hidden && "Notification" in window && Notification.permission === "granted";
     for (const [pid, x] of Object.entries(myMeta)) if (x.from !== uid && x.ts > (metaSeen[pid] || 0)) {
-      if (metaInit && hid) new Notification("Личное сообщение · " + (x.nick || ""), { body: x.prev || "" });
+      if (metaInit && hid) pushN("Личное сообщение · " + (x.nick || ""), x.prev || "");
       metaSeen[pid] = x.ts;
     }
-    if (lastInbox > (metaSeen.svc || 0)) { if (metaInit && hid) new Notification("Служба · definitely pantera", { body: "Новое уведомление" }); metaSeen.svc = lastInbox; }
+    if (lastInbox > (metaSeen.svc || 0)) { if (metaInit && hid) pushN("Служба · definitely pantera", "Новое уведомление"); metaSeen.svc = lastInbox; }
     metaInit = true;
     refreshReacts();
     updateBadge();
@@ -1300,7 +1342,7 @@ async function command27(t) {
   });
 })();
 /* ===== пароль для защищённых имён (оператор и администратор) ===== */
-const PW_SALT = "accc7086b3f37304ea9feb5e2b3520c3", PW_ITER = 200000, PW_HASH = "389096932a1a17343ee3accb45b7d90e2310c81a3a9d6b212f4cc76e7ad87a9f";
+const PW_SALT = "accc7086b3f37304ea9feb5e2b3520c3", PW_ITER = 200000, PW_HASH = "c4fef597b945b2186b04d716aea283a933953a1df90f6cff894ea0e6cf4cc362"; // пароль обновлён
 async function needPw(nick) { return await isVip(nick); }   // имя администратора (Vladimir Smirnove)
 async function pwOk(p) {
   try {
@@ -1503,4 +1545,36 @@ $("ln").onkeydown = e => { if (e.key === "Enter") register(); };
 $("out").onclick = leave;
 if (consentOk()) loadFonts();
 if (store.get("dp_ok") === CODE_HASH) { if (!consentOk()) showConsent(); else if (store.get("dp_nick")) enter(store.get("dp_nick")); else showReg(); }
+</script><script>
+/* ===== 2.9+ iOS ===== */
+(function () {
+  const root = document.documentElement, vv = window.visualViewport, app = document.getElementById("app");
+  const appOn = () => app && !app.classList.contains("hide");
+  let lastH = 0;
+  function fit() {
+    if (!vv || !root.classList.contains("ios")) return;
+    const h = Math.round(vv.height), kb = window.innerHeight - vv.height > 120;
+    root.style.setProperty("--vvh", h + "px"); root.style.setProperty("--vvt", Math.round(vv.offsetTop) + "px");
+    root.classList.toggle("kb", kb);
+    const m = document.getElementById("msgs");
+    if (appOn() && m && lastH && h < lastH && m.scrollHeight - m.scrollTop - m.clientHeight < 400 + (lastH - h)) setTimeout(() => { m.scrollTop = m.scrollHeight; }, 50);
+    lastH = h;
+  }
+  if (vv) { vv.addEventListener("resize", fit); vv.addEventListener("scroll", fit); fit(); }
+  document.addEventListener("focusin", e => {
+    if (!root.classList.contains("ios")) return;
+    const t = e.target; if (!t || !/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.closest("#f")) return;
+    setTimeout(() => { try { t.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (x) {} }, 350);
+  });
+  function resume() {
+    if (document.hidden || !appOn()) return;
+    try { if (typeof poll === "function") poll(); if (typeof refreshLists === "function") refreshLists(); if (typeof beat === "function") beat(); } catch (e) {}
+  }
+  document.addEventListener("visibilitychange", resume);
+  window.addEventListener("pageshow", e => { if (e.persisted) resume(); });
+  const tc = document.querySelector('meta[name="theme-color"]');
+  function paintTheme() { try { const c = getComputedStyle(root).getPropertyValue("--bg").trim(); if (tc && c) tc.setAttribute("content", c); } catch (e) {} }
+  try { new MutationObserver(paintTheme).observe(root, { attributes: true, attributeFilter: ["data-theme", "class"] }); } catch (e) {}
+  paintTheme();
+})();
 </script><script>if("serviceWorker"in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script></body></html>
