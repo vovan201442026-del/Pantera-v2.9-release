@@ -1,8 +1,17 @@
-const V="pantera-2.9+",FILES=["./","index.html","manifest.webmanifest","policy.html","icon-192.png","icon-512.png"];
-self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(FILES)));self.skipWaiting()});
-self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
-self.addEventListener("fetch",e=>{
-  const r=e.request;
-  if(r.method!=="GET"||new URL(r.url).origin!==location.origin)return; // база Firebase и др. не кэшируем
-  e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put(r,c));return res}).catch(()=>caches.match(r).then(m=>m||caches.match("index.html"))));
+const CACHE = "pantera-v1";
+const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
+self.addEventListener("install", e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {}).then(() => self.skipWaiting()));
+});
+self.addEventListener("activate", e => {
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+});
+// только свои файлы: сначала сеть, при отсутствии интернета — кэш. Запросы к базе не трогаем.
+self.addEventListener("fetch", e => {
+  const r = e.request, u = new URL(r.url);
+  if (r.method !== "GET" || u.origin !== location.origin) return;
+  e.respondWith(
+    fetch(r).then(res => { const copy = res.clone(); caches.open(CACHE).then(c => c.put(r, copy)).catch(() => {}); return res; })
+      .catch(() => caches.match(r).then(m => m || caches.match("index.html")))
+  );
 });
