@@ -626,11 +626,33 @@ async function react(k, emo) {
   const has = reacts[k] && reacts[k][emo] && reacts[k][emo][uid];
   try { await dbPatch({ ["react/" + t + "/" + k + "/" + emo + "/" + uid]: has ? null : true }); await refreshReacts(); } catch (e) {}
 }
-async function delMsg(k) {
-  const m = {};
-  if (cur.k === "group") m["messages/" + k] = null;
-  else { m["dm/" + uid + "/" + cur.peer + "/" + k] = null; m["dm/" + cur.peer + "/" + uid + "/" + k] = null; }
-  try { await dbPatch(m); lastKey = null; poll(); } catch (e) {}
+async function delMsg(k, onlyMe) {
+  const c = cur, m = {};
+  if (c.k === "dm" && !confirm(onlyMe ? "Удалить это сообщение только у себя?" : "Удалить сообщение у обоих?")) return;
+  if (c.k === "group") m["messages/" + k] = null;
+  else { m["dm/" + uid + "/" + c.peer + "/" + k] = null; if (!onlyMe) m["dm/" + c.peer + "/" + uid + "/" + k] = null; }
+  try {
+    if (!(await dbPatch(m))) throw 0;
+    if (c.k === "dm") await fixDmMeta(c.peer, !onlyMe);
+    lastKey = null; poll();
+  } catch (e) { alert("Не удалось удалить сообщение"); }
+}
+// после удаления обновляем превью последнего сообщения в списке «Личные»
+async function fixDmMeta(peer, both) {
+  try {
+    const last = await dbGet("dm/" + uid + "/" + peer, 1);
+    const x = last ? Object.values(last)[0] : null;
+    if (x && x.sys) return;
+    const upd = {};
+    if (!x) { upd["meta/" + uid + "/" + peer] = null; if (both) upd["meta/" + peer + "/" + uid] = null; delete myMeta[peer]; }
+    else {
+      const prev = (x.text || (x.sticker ? "стикер 🐾" : "вложение")).slice(0, 50), from = x.uid || uid;
+      const mine = { ts: x.ts, prev, from, nick: (myMeta[peer] && myMeta[peer].nick) || (cur.peer === peer ? cur.nick : "") };
+      upd["meta/" + uid + "/" + peer] = mine; myMeta[peer] = mine;
+      if (both) upd["meta/" + peer + "/" + uid] = { ts: x.ts, prev, from, nick: me };
+    }
+    await dbPatch(upd); updateBadge(); if (view === "dms") renderDmList();
+  } catch (e) {}
 }
 function setReply(m) {
   replyTo = { nick: m.nick, text: String(m.text || (m.sticker ? "стикер 🐾" : "вложение")).slice(0, 60) };
@@ -861,6 +883,7 @@ async function render(list) {
       const ra = document.createElement("button"); ra.type = "button"; ra.textContent = "Ответить"; ra.onclick = () => setReply(m); tm.appendChild(ra);
       if (m.text) { const cp = document.createElement("button"); cp.type = "button"; cp.textContent = "Копировать"; cp.onclick = () => { try { navigator.clipboard.writeText(m.text); cp.textContent = "Скопировано"; setTimeout(() => { cp.textContent = "Копировать"; }, 1200); } catch (e) {} }; tm.appendChild(cp); }
       if (mine || (selfVip && cur.k === "group")) { const rd2 = document.createElement("button"); rd2.type = "button"; rd2.textContent = "Удалить"; rd2.onclick = () => delMsg(k); tm.appendChild(rd2); }
+      else if (cur.k === "dm") { const rd3 = document.createElement("button"); rd3.type = "button"; rd3.textContent = "Удалить у себя"; rd3.onclick = () => delMsg(k, true); tm.appendChild(rd3); }
     }
     el.appendChild(tm); box.appendChild(el);
   }
